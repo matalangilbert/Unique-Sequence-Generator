@@ -27,6 +27,16 @@ for i in 0..9
   end
 end
 
+test = Array.new
+for i in 0..9
+  test << i
+end
+
+permutations = test.permutations.to_a
+permutations.inspect
+gets
+
+
 sequences.delete_if do |seq|
   (seq.first == seq.second) || (seq.first == seq.third) || (seq.first == seq.fourth) || (seq.second == seq.third) || (seq.second == seq.fourth) || (seq.third == seq.fourth)
 end
