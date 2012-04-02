@@ -33,10 +33,10 @@ end
 
 LIMIT=7
 def add_sequence(final_sequences,frequencies, sequence)  
-  if ((frequencies[[1,sequence.first]]+1)<LIMIT)
-    if (frequencies[[2,sequence.second]]<LIMIT)
-      if (frequencies[[3,sequence.third]]<LIMIT)
-        if (frequencies[[4,sequence.fourth]]<LIMIT)
+  if ((frequencies[[1,sequence.first]]+1)<=LIMIT)
+    if ((frequencies[[2,sequence.second]]+1)<=LIMIT)
+      if ((frequencies[[3,sequence.third]]+1)<=LIMIT)
+        if ((frequencies[[4,sequence.fourth]]+1)<=LIMIT)
           frequencies[[1,sequence.first]] += 1
           frequencies[[2,sequence.second]] += 1
           frequencies[[3,sequence.third]] += 1
@@ -49,19 +49,25 @@ def add_sequence(final_sequences,frequencies, sequence)
 end
     
 iterations = 0
-
-while iterations<1000 do
+max_sequence_length = 0
+while iterations<50 do
   final_sequences = Array.new
   final_frequencies = Hash.new(0)
-  
+
   sequences.each do |sequence|
     add_sequence(final_sequences, final_frequencies,sequence)
   end
   
+  if (max_sequence_length < final_sequences.length)
+    max_sequence_length = final_sequences.length
+  end
+  
   puts "Number of sequences: #{final_sequences.length}"
   puts "Frequencies: #{final_frequencies.inspect}"
+  puts "Max sequence length: #{max_sequence_length}"
   
   sequences.shuffle!
+  iterations += 1
 end
 
 
