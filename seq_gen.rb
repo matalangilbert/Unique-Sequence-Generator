@@ -42,18 +42,21 @@ def get_frequency(frequencies,digit,position)
   frequencies[position][digit]
 end
 
-
+=begin
+Input:    str => string to be evaluated
+Returns:  boolean => true if string evaluates to positive integer, otherwise false.
+=end
 def is_int?(str)
-  !!(str =~ /^[+]?[0-9]+$/)
+  !!(str =~ /^[+]?[0-9]+$/) #regexp for positive integer, returning boolean
 end
 =begin
 Main script. 
-Steps through sequences from 10 to 1000 in intervals of 10, outputs each
+Steps through sequences from 10 to ARGV[0] in intervals of ARGV[1], outputs each
 unique sequence to a .csv file (number_of_sequences)_unique_sequences.csv
 Not presently optimised for speed.
 =end
-if is_int?(ARGV[0])
-  (10..ARGV[0].to_i).step(10) do |number_of_sequences|
+if (is_int?(ARGV[0]) && is_int?(ARGV[1]))
+  (10..ARGV[0].to_i).step(ARGV[1].to_i) do |number_of_sequences|
     puts "Currently calculating #{number_of_sequences} sequences.."
     @start_time = Time.new
     @sequences = generate_sequence()
@@ -96,5 +99,10 @@ if is_int?(ARGV[0])
     puts "Completed in: #{Time.now-@start_time} seconds"
   end
 else
-  puts "Invalid first parameter: \'#{ARGV[0]}\' - Number of sequences must be a positive integer"
+  unless is_int?(ARGV[0])
+    puts "Invalid first parameter: \'#{ARGV[0]}\' - Number of sequences must be a positive integer"
+  end
+  unless is_int?(ARGV[1])
+    puts "Invalid second parameter: \'#{ARGV[1]}\' - Interval size must be a positive integer"
+  end
 end
