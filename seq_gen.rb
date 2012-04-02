@@ -18,37 +18,49 @@ def get_frequency(frequencies,digit,position)
   frequencies[position][digit]
 end
 
-@sequences = generate_sequence()
-number_of_sequences = 50
-@final_sequences = Array.new
-while (@final_sequences.length<number_of_sequences)
-  
-  @test_sequences = Array.new 
+(10..1000).step(10) do |number_of_sequences|
+  puts "Currently calculating #{number_of_sequences} sequences.."
+  @sequences = generate_sequence()
+  #number_of_sequences = 50
   @final_sequences = Array.new
-  
-  @sequences.shuffle!
-  @frequencies = calcuate_frequencies(@sequences)
-  
-  @sequences.each do |sequence|
-    sequence_ok = true
-    @test_sequences << sequence
+  while (@final_sequences.length<number_of_sequences)
     
-    @test_frequencies = calcuate_frequencies(@test_sequences)
-    #puts calcuate_frequencies(@final_sequences).inspect
+    @test_sequences = Array.new 
+    @final_sequences = Array.new
     
-    for digit in 0..9
-      for position in 0..3      
-        if (get_frequency(@test_frequencies,digit,position)>number_of_sequences/10)
-          sequence_ok = false
+    @sequences.shuffle!
+    @frequencies = calcuate_frequencies(@sequences)
+    
+    @sequences.each do |sequence|
+      sequence_ok = true
+      @test_sequences << sequence
+      
+      @test_frequencies = calcuate_frequencies(@test_sequences)
+      #puts calcuate_frequencies(@final_sequences).inspect
+      
+      for digit in 0..9
+        for position in 0..3      
+          if (get_frequency(@test_frequencies,digit,position)>number_of_sequences/10)
+            sequence_ok = false
+          end
         end
       end
-    end
-    if sequence_ok
-      @final_sequences = @test_sequences.dup
-    else
-      @test_sequences.delete(sequence)
+      if sequence_ok
+        @final_sequences = @test_sequences.dup
+      else
+        @test_sequences.delete(sequence)
+      end
     end
   end
+  puts "#{number_of_sequences} Frequencies: #{calcuate_frequencies(@final_sequences)}"
+  puts "#{number_of_sequences} Length: #{@final_sequences.length}\n#{number_of_sequences} Sequences: #{@final_sequences}"
+
+  File.open("#{number_of_sequences}_unique_sequences.csv","w") do |f|
+      @final_sequences.each do |sequence|
+      f.puts sequence.inspect.delete!("[] ")
+    end
+  end
+
 end
 puts "Final Frequencies: #{calcuate_frequencies(@final_sequences)}"
 puts "Final Length: #{@final_sequences.length}\nFinal Sequences: #{@final_sequences}"
