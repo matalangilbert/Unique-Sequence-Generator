@@ -2,7 +2,7 @@ Stimuli generation for auditory memory experiment
 
 Calculates unique 4 digit long number sequences where
 each position (1 through 4) contains digits (0 through 9)
-the same number of times. Outputs a .csv file for each sequence.
-Calculates sequences from 10 digits long to a user supplied number 
+the same number of times. Outputs a .csv file for each sequence set.
+Calculates sequences from length 10 to a user supplied number 
 of digits long (starts running more slowly after 100 digits long, 
 currently tested to correctly output 300 digit long sequence).

@@ -67,7 +67,7 @@ if (is_int?(ARGV[0]) && is_int?(ARGV[1]))
 
       @sequences.each do |sequence|
         sequence_ok = true
-        @final_sequences << sequence #add sequence to test array
+        @final_sequences << sequence #add sequence to test
         @test_frequencies = calcuate_frequencies(@final_sequences) #get new frequencies
 
         for digit in 0..9 #for each digit
