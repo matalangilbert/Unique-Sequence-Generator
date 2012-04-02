@@ -1,30 +1,38 @@
 #!/usr/bin/env ruby
 
-test = (0..9).to_a
-sequences = test.permutation(4).to_a
+sequences = Array.new
 
-freq_in_position = Hash.new(0)
+def new_sample(samples)
 
-final_sequences = Array.new
+  one = samples.sample
+ 
+  begin
+    two = samples.sample
+  end while (two == one)
 
-sequences.each do |seq|
-  insert = true
-  seq.each_with_index do |digit,position|
-    if (freq_in_position[[position,digit]] >= 7)
-      insert = false
-    end
-  end
-  if (insert)
-    final_sequences << seq
-    seq.each_with_index do |digit,position|
-    freq_in_position[[position,digit]] +=1
-    end
+  begin
+    three = samples.sample
+  end while ((three == two) || (three == one))
+
+  begin
+    four = samples.sample
+  end while ((four == three) || (four == two) || (four == one))
+  
+  sample = "#{one}#{two}#{three}#{four}"
+end
+
+
+samples = (0..9).to_a
+while(sequences.length < 100)
+  sample = new_sample(samples)
+  unless (sequences.include?(sample))
+    sequences << sample
   end
 end
 
-p freq_in_position.inspect
-p final_sequences.length
-p final_sequences
+unless (sequences.uniq!)
+  puts "All unique sequences!"
+end
 
-
-
+puts "Sequences: #{sequences.inspect}"
+puts "Number of Sequences: #{sequences.length}"
