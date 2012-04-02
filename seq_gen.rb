@@ -12,18 +12,18 @@ def delete_from_samples(number, samples)
 end
 
 def new_sample(first_samples, second_samples, third_samples, fourth_samples)
-  one = first_samples.first
+  one = first_samples.sample
   
   begin
-    two = second_samples.first
+    two = second_samples.sample
   end while (two == one)
 
   begin
-    three = third_samples.first
+    three = third_samples.sample
   end while ((three == two) || (three == one))
 
   begin
-    four = fourth_samples.first
+    four = fourth_samples.sample
   end while ((four == three) || (four == two) || (four == one))
 
   delete_from_samples(one,first_samples)
