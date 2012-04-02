@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -w
 =begin
 Author:   Mathew Gilbert freefallertam _AT_ gmail _DOT_ com
 Filename: seq_gen.rb
