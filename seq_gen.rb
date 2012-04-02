@@ -33,11 +33,6 @@ def new_sample(first_samples, second_samples, third_samples, fourth_samples)
     end
   end
    
-
-  delete_from_samples(one,first_samples)
-  delete_from_samples(two,second_samples)
-  delete_from_samples(three,third_samples)
-  delete_from_samples(four,fourth_samples)
   unless (one.nil? || two.nil? || three.nil? or four.nil?)
     sample = "#{one}#{two}#{three}#{four}"
     return sample
@@ -61,10 +56,10 @@ end
 def generate_sequence()
   begin
     sequences = Array.new
-    first_position_samples = (0..9).to_a.shuffle!
-    second_position_samples = (0..9).to_a.shuffle!
-    third_position_samples =  (0..9).to_a.shuffle!
-    fourth_position_samples =  (0..9).to_a.shuffle!
+    first_position_samples = (0..9).to_a
+    second_position_samples = (0..9).to_a
+    third_position_samples =  (0..9).to_a
+    fourth_position_samples =  (0..9).to_a
     
     0.upto(first_position_samples.length) do
       sample = new_sample(first_position_samples, second_position_samples, third_position_samples, fourth_position_samples)
@@ -74,7 +69,7 @@ def generate_sequence()
       end
     end
     sequences.compact!
-  end while (sequences.length<10)
+  end while (sequences.length<100)
   return sequences
 end
   
