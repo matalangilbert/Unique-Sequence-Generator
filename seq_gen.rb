@@ -16,10 +16,10 @@ currently tested to correctly output 300 digit long sequence).
 * Returns:  two-dimensional array [position][digit] = frequency of digit occurrence
 =end
 def calcuate_frequencies(sequences)
-  freq_array = Array.new(4) {|i|Array.new(10){|i| 0}}
+  freq_array = Array.new(4) {|i|Array.new(10){|i| 0}} #2-dimensional array, second dimension initialised to 0's
   sequences.each do |seq|
     for position in 0..3
-      freq_array[position][seq[position].to_i] += 1
+      freq_array[position][seq[position].to_i] += 1 #increment frequency value by 1
     end
   end
   freq_array
@@ -29,7 +29,7 @@ end
 * Returns:  array of all permutations of numbers 0 to 9, 4 digits long
 =end
 def generate_sequence()
-  samples = (0..9).to_a.permutation(4).to_a
+  (0..9).to_a.permutation(4).to_a #all permutations, 4 digits long
 end
 
 =begin
@@ -62,27 +62,24 @@ if (is_int?(ARGV[0]) && is_int?(ARGV[1]))
     @sequences = generate_sequence()
     @final_sequences = Array.new
     while (@final_sequences.length<number_of_sequences)
-      @test_sequences = Array.new #to check frequencies with
       @final_sequences = Array.new #consists of sequences that do not exceed the frequency threshold
       @sequences.shuffle! #start with random sequence
 
       @sequences.each do |sequence|
         sequence_ok = true
-        @test_sequences << sequence #add sequence to test array
-        @test_frequencies = calcuate_frequencies(@test_sequences) #get new frequencies
+        @final_sequences << sequence #add sequence to test array
+        @test_frequencies = calcuate_frequencies(@final_sequences) #get new frequencies
 
         for digit in 0..9 #for each digit
           for position in 0..3 #in each position
-            if (get_frequency(@test_frequencies,digit,position)>number_of_sequences/10) #if frequency (of any digit, in any position) is above the threshold
+            if (get_frequency(@test_frequencies,digit,position) > number_of_sequences/10) #if frequency (of any digit, in any position) is above the threshold
               sequence_ok = false #don't use the sequence
             end
           end
         end
 
-        if sequence_ok #if the sequence doesn't exceed any frequency thresholds
-          @final_sequences = @test_sequences.dup #update final sequences with the next sequence list
-        else
-          @test_sequences.delete(sequence)
+        unless sequence_ok #if the sequence exceeds any frequency thresholds
+          @final_sequences.delete(sequence) #don't use the sequence
         end
       end
     end
@@ -94,7 +91,8 @@ if (is_int?(ARGV[0]) && is_int?(ARGV[1]))
     end
     puts "Completed in: #{Time.now-@start_time} seconds"
   end
-else
+
+else #input parameters are invalid
   unless is_int?(ARGV[0])
     puts "Invalid first parameter: \'#{ARGV[0]}\' - Number of sequences must be a positive integer"
   end
