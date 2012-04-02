@@ -41,6 +41,25 @@ sequences.each do |sequence|
   puts "#{sequence}"
 end
 
+final_sequences = Array.new
+
+LIMIT=7
+def add_sequence(frequencies, sequence)  
+  if ((frequencies[[1,sequence.first]]+1)<LIMIT)
+    if (frequencies[[2,sequence.second]]<LIMIT)
+      if (frequencies[[3,sequence.third]]<LIMIT)
+        if (frequencies[[4,sequence.fourth]]<LIMIT)
+          final_sequences << sequence
+        end
+      end
+    end
+  end
+end
+    
+
+sequences.each do |sequence|
+  
+
 puts "Number of sequences: #{sequences.length}"
 
 puts "Frequencies: #{frequencies.inspect}"
