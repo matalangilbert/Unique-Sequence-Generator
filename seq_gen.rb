@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/env ruby
 =begin
 Author:   Mathew Gilbert freefallertam _AT_ gmail _DOT_ com
 Filename: seq_gen.rb
@@ -7,7 +7,8 @@ Summary:  Calculates unique 4 digit long number sequences where
           each position (1 through 4) contains digits (0 through 9)
           the same number of times. Outputs a .csv file for each sequence.
           Calculates sequences from 10 digits long to 1000 digits long (starts
-          running more slowly after 100 digits long).
+          running more slowly after 100 digits long, currently tested to 
+          correctly output 300 digit long sequence).
 =end
 
 =begin
@@ -41,51 +42,59 @@ def get_frequency(frequencies,digit,position)
   frequencies[position][digit]
 end
 
+
+def is_int?(str)
+  !!(str =~ /^[+]?[0-9]+$/)
+end
 =begin
 Main script. 
 Steps through sequences from 10 to 1000 in intervals of 10, outputs each
 unique sequence to a .csv file (number_of_sequences)_unique_sequences.csv
 Not presently optimised for speed.
 =end
-(10..1000).step(10) do |number_of_sequences|
-  puts "Currently calculating #{number_of_sequences} sequences.."
-  @start_time = Time.new
-  @sequences = generate_sequence()
-  @final_sequences = Array.new
-  while (@final_sequences.length<number_of_sequences)
-    
-    @test_sequences = Array.new 
+if is_int?(ARGV[0])
+  (10..ARGV[0].to_i).step(10) do |number_of_sequences|
+    puts "Currently calculating #{number_of_sequences} sequences.."
+    @start_time = Time.new
+    @sequences = generate_sequence()
     @final_sequences = Array.new
-    
-    @sequences.shuffle!
-    @frequencies = calcuate_frequencies(@sequences)
-    
-    @sequences.each do |sequence|
-      sequence_ok = true
-      @test_sequences << sequence
+    while (@final_sequences.length<number_of_sequences)
       
-      @test_frequencies = calcuate_frequencies(@test_sequences)
-      #puts calcuate_frequencies(@final_sequences).inspect
+      @test_sequences = Array.new 
+      @final_sequences = Array.new
       
-      for digit in 0..9
-        for position in 0..3      
-          if (get_frequency(@test_frequencies,digit,position)>number_of_sequences/10)
-            sequence_ok = false
+      @sequences.shuffle!
+      @frequencies = calcuate_frequencies(@sequences)
+      
+      @sequences.each do |sequence|
+        sequence_ok = true
+        @test_sequences << sequence
+        
+        @test_frequencies = calcuate_frequencies(@test_sequences)
+        #puts calcuate_frequencies(@final_sequences).inspect
+        
+        for digit in 0..9
+          for position in 0..3      
+            if (get_frequency(@test_frequencies,digit,position)>number_of_sequences/10)
+              sequence_ok = false
+            end
           end
         end
-      end
-      if sequence_ok
-        @final_sequences = @test_sequences.dup
-      else
-        @test_sequences.delete(sequence)
+        if sequence_ok
+          @final_sequences = @test_sequences.dup
+        else
+          @test_sequences.delete(sequence)
+        end
       end
     end
-  end
-
+  
   File.open("#{number_of_sequences}_unique_sequences.csv","w") do |f|
-      @final_sequences.each do |sequence|
-      f.puts sequence.inspect.delete!("[] ")
+        @final_sequences.each do |sequence|
+        f.puts sequence.inspect.delete!("[] ")
+      end
     end
+    puts "Completed in: #{Time.now-@start_time} seconds"
   end
-  puts "Completed in: #{Time.now-@start_time}"
+else
+  puts "Invalid first parameter: \'#{ARGV[0]}\' - Number of sequences must be a positive integer"
 end
