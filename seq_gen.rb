@@ -1,84 +1,30 @@
 #!/usr/bin/env ruby
 
-class Sequence
-  attr_accessor :first
-  attr_accessor :second
-  attr_accessor :third
-  attr_accessor :fourth
-  
-  def to_s
-    "#{@first}#{@second}#{@third}#{@fourth}"
-  end   
-end
+test = (0..9).to_a
+sequences = test.permutation(4).to_a
 
-sequences = Array.new
-for i in 0..9
-  for j in 0..9
-    for k in 0..9
-      for l in 0..9
-        seq = Sequence.new
-        seq.first = i
-        seq.second = j
-        seq.third = k
-        seq.fourth = l
-        sequences << seq
-      end
+freq_in_position = Hash.new(0)
+
+final_sequences = Array.new
+
+sequences.each do |seq|
+  insert = true
+  seq.each_with_index do |digit,position|
+    if (freq_in_position[[position,digit]] >= 7)
+      insert = false
+    end
+  end
+  if (insert)
+    final_sequences << seq
+    seq.each_with_index do |digit,position|
+    freq_in_position[[position,digit]] +=1
     end
   end
 end
 
-test = Array.new
-for i in 0..9
-  test << i
-end
-
-permutations = test.permutations.to_a
-permutations.inspect
-gets
-
-
-sequences.delete_if do |seq|
-  (seq.first == seq.second) || (seq.first == seq.third) || (seq.first == seq.fourth) || (seq.second == seq.third) || (seq.second == seq.fourth) || (seq.third == seq.fourth)
-end
-
-LIMIT=7
-def add_sequence(final_sequences,frequencies, sequence)  
-  if ((frequencies[[1,sequence.first]]+1)<=LIMIT)
-    if ((frequencies[[2,sequence.second]]+1)<=LIMIT)
-      if ((frequencies[[3,sequence.third]]+1)<=LIMIT)
-        if ((frequencies[[4,sequence.fourth]]+1)<=LIMIT)
-          frequencies[[1,sequence.first]] += 1
-          frequencies[[2,sequence.second]] += 1
-          frequencies[[3,sequence.third]] += 1
-          frequencies[[4,sequence.fourth]] += 1
-          final_sequences << sequence
-        end
-      end
-    end
-  end
-end
-    
-iterations = 0
-max_sequence_length = 0
-while iterations<50 do
-  final_sequences = Array.new
-  final_frequencies = Hash.new(0)
-
-  sequences.each do |sequence|
-    add_sequence(final_sequences, final_frequencies,sequence)
-  end
-  
-  if (max_sequence_length < final_sequences.length)
-    max_sequence_length = final_sequences.length
-  end
-  
-  puts "Number of sequences: #{final_sequences.length}"
-  puts "Frequencies: #{final_frequencies.inspect}"
-  puts "Max sequence length: #{max_sequence_length}"
-  
-  sequences.shuffle!
-  iterations += 1
-end
+p freq_in_position.inspect
+p final_sequences.length
+p final_sequences
 
 
 
