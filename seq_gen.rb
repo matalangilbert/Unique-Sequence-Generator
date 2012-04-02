@@ -2,8 +2,16 @@
 
 sequences = Array.new
 
-def new_sample(first_samples, second_samples, third_samples, fourth_samples)
+def delete_from_samples(number, samples)
+  for i in 0..samples.length
+    if (samples[i] == number)
+      samples.delete_at(i)
+      break
+    end
+  end
+end
 
+def new_sample(first_samples, second_samples, third_samples, fourth_samples)
   one = first_samples.sample
   
   begin
@@ -17,48 +25,36 @@ def new_sample(first_samples, second_samples, third_samples, fourth_samples)
   begin
     four = fourth_samples.sample
   end while ((four == three) || (four == two) || (four == one))
-  
-  for i in 0..first_samples.length
-    if (first_samples[i] == one)
-      first_samples.delete_at(i)
-      break
-    end
-  end
-  
-  for i in 0..second_samples.length
-    if (second_samples[i] == two) 
-      second_samples.delete_at(i)
-      break
-    end
-  end
-  
-  for i in 0..third_samples.length
-    if (third_samples[i] == three)
-      third_samples.delete_at(i)
-      break
-    end
-  end
-  
-  for i in 0..fourth_samples.length
-    if (fourth_samples[i] == four)
-      fourth_samples.delete_at(i)
-      break
-    end
-  end
 
+  delete_from_samples(one,first_samples)
+  delete_from_samples(two,second_samples)
+  delete_from_samples(three,third_samples)
+  delete_from_samples(four,fourth_samples)
+  
   sample = "#{one}#{two}#{three}#{four}"
 end
 
-first_position_samples = (0..9).to_a + (0..9).to_a
-second_position_samples = (0..9).to_a + (0..9).to_a
-third_position_samples =  (0..9).to_a + (0..9).to_a
-fourth_position_samples =  (0..9).to_a + (0..9).to_a
+def calcuate_frequencies(sequences)
+  freq_array = Array.new(4) {|i|Array.new(10){|i| 0}}
+  sequences.each do |seq|
+    array = seq.chars.to_a
+    for position in 0..array.length-1
+      freq_array[position][array[position].to_i] += 1
+    end 
+  end
+  freq_array
+end
 
-while(sequences.length <18)
+first_position_samples = (0..9).to_a
+second_position_samples = (0..9).to_a
+third_position_samples =  (0..9).to_a
+fourth_position_samples =  (0..9).to_a
+
+0.upto(first_position_samples.length-1) do
   sample = new_sample(first_position_samples, second_position_samples, third_position_samples, fourth_position_samples)
   unless (sequences.include?(sample))
-    sequences << sample
-    puts "Sample: #{sample}. Total sequences: #{sequences.length}"
+      sequences << sample
+      puts "Sample: #{sample}. Total sequences: #{sequences.length}"
   end
 end
 
@@ -66,9 +62,13 @@ unless sequences.uniq!
   puts "All unique sequences!"
 end
 
-sequences.each do |seq|
-  array = seq.chars.to_a
-  puts array.inspect
-end
+freqs = calcuate_frequencies(sequences)
+
+puts "Frequency 1 @ pos 1: #{freqs[0][0]}"
+puts "Frequency 2 @ pos 1: #{freqs[0][1]}"
+puts "Frequency 3 @ pos 1: #{freqs[0][2]}"
+
+puts ("Frequencies: #{freqs.inspect}")
 puts "Sequences: #{sequences.inspect}"
 puts "Number of Sequences: #{sequences.length}"
+
