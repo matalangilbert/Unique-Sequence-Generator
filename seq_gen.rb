@@ -32,20 +32,13 @@ sequences.delete_if do |seq|
 end
 
 frequencies = Hash.new(0)
- 
-def get_frequencies(frequencies,position,number)
-  frequencies[[position,number]] += 1
-end
 
 sequences.each do |sequence|
-  get_frequencies(frequencies,1,sequence.first)
-  get_frequencies(frequencies,2,sequence.second)
-  get_frequencies(frequencies,3,sequence.third)  
-  get_frequencies(frequencies,4,sequence.fourth)
-end
-
-sequences.each do |sequence|
-    puts "#{sequence}"
+  frequencies[[1,sequence.first]] += 1
+  frequencies[[2,sequence.second]] += 1
+  frequencies[[3,sequence.third]] += 1
+  frequencies[[4,sequence.fourth]] += 1
+  puts "#{sequence}"
 end
 
 puts "Number of sequences: #{sequences.length}"
