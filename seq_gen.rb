@@ -31,9 +31,6 @@ sequences.delete_if do |seq|
   (seq.first == seq.second) || (seq.first == seq.third) || (seq.first == seq.fourth) || (seq.second == seq.third) || (seq.second == seq.fourth) || (seq.third == seq.fourth)
 end
 
-final_sequences = Array.new
-final_frequencies = Hash.new(0)
-
 LIMIT=7
 def add_sequence(final_sequences,frequencies, sequence)  
   if ((frequencies[[1,sequence.first]]+1)<LIMIT)
@@ -51,14 +48,21 @@ def add_sequence(final_sequences,frequencies, sequence)
   end
 end
     
+iterations = 0
 
-sequences.each do |sequence|
-  add_sequence(final_sequences, final_frequencies,sequence)
+while iterations<1000 do
+  final_sequences = Array.new
+  final_frequencies = Hash.new(0)
+  
+  sequences.each do |sequence|
+    add_sequence(final_sequences, final_frequencies,sequence)
+  end
+  
+  puts "Number of sequences: #{final_sequences.length}"
+  puts "Frequencies: #{final_frequencies.inspect}"
+  
+  sequences.shuffle!
 end
-
-puts "Number of sequences: #{final_sequences.length}"
-
-puts "Frequencies: #{final_frequencies.inspect}"
 
 
 
